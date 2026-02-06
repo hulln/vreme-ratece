@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <title>Zime v Ratečah</title>
+    <meta name="description" content="Analiza 76 let zimskih vremenskih podatkov za Rateče (1949-2025): temperature, sneg, podnebne spremembe. Temperatura se je zvišala za 1.7°C. Meteorološka postaja ARSO na 864 m nadmorske višine v slovenskih Alpah.">
+    <meta name="keywords" content="Rateče vreme, podnebne spremembe Slovenije, ARSO meritve, temperature Rateče, sneg Alpe, meteorološka postaja, zime Slovenije, globalno segrevanje, zgodovinski vremenski podatki, mrzli dnevi, ledeni dnevi, snežna odeja, taljenje snega, nočne temperature">
+    <meta name="author" content="ARSO Meteorološki podatki">
+    <link rel="canonical" href="https://yourdomain.com/ratece-zime">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourdomain.com/ratece-zime">
+    <meta property="og:title" content="Zime v Ratečah 1949–2025 | 76 let vremenskih meritev">
+    <meta property="og:description" content="76 let meteoroloških meritev prikazuje trende zimskih pogojev. Temperatura se je zvišala za 1.7°C, dni s snežno odejo so se skrajšali za 75 dni." >
+    <meta property="og:image" content="https://yourdomain.com/og-image-ratece.jpg">
+    <meta property="og:locale" content="sl_SI">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://yourdomain.com/ratece-zime">
+    <meta property="twitter:title" content="Zime v Ratečah 1949–2025">
+    <meta property="twitter:description" content="76 let vremenskih meritev kaže +2.0°C dvig temperature in manj snega v slovenskih Alpah.">
+    <meta property="twitter:image" content="https://yourdomain.com/og-image-ratece.jpg">
+    
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Dataset",
+      "name": "Zimski vremenski podatki za Rateče 1949-2025",
+      "description": "76 let meteoroloških meritev za postajo Rateče: temperature, snežna odeja, ledeni dnevi",
+      "url": "https://yourdomain.com/ratece-zime",
+      "keywords": ["Rateče", "vreme", "temperatura", "sneg", "podnebne spremembe", "Slovenija", "Alpe"],
+      "creator": {
+        "@type": "Organization",
+        "name": "ARSO - Agencija Republike Slovenije za okolje",
+        "url": "https://meteo.arso.gov.si"
+      },
+      "spatialCoverage": {
+        "@type": "Place",
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 46.4971,
+          "longitude": 13.7129,
+          "elevation": 864
+        },
+        "name": "Rateče, Slovenija"
+      },
+      "temporalCoverage": "1949/2025"
+    }
+    </script>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>❄️</text></svg>">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="hero">
+        <h1>Zime v Ratečah</h1>
+        <div class="subtitle">1949–2025</div>
+        <div class="location">Merilna postaja Rateče, 864 m nadmorske višine</div>
+        <div class="scroll-indicator">
+            <div class="scroll-arrow"></div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="map-info-grid">
+            <div class="map-container">
+                <iframe 
+                    src="https://www.openstreetmap.org/export/embed.html?bbox=13.7029%2C46.4871%2C13.7229%2C46.5071&layer=mapnik&marker=46.4971%2C13.7129"
+                    style="border: none;">
+                </iframe>
+            </div>
+            <div class="station-info">
+                <h3 style="margin-bottom: 1.5rem;">Meteorološka postaja</h3>
+                <div class="info-items-container">
+                    <div class="info-item">
+                        <div class="info-label">Lokacija</div>
+                        <div class="info-value">
+                            Rateče, Slovenija
+                            <a href="https://meteo.arso.gov.si/uploads/probase/www/climate/text/sl/stations/Rate%C4%8De.pdf" 
+                               class="station-link" 
+                               target="_blank">(analiza postaje)</a>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Nadmorska višina</div>
+                        <div class="info-value">864 m</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Koordinate</div>
+                        <div class="info-value">46.4971°N, 13.7129°E</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Obdobje meritev</div>
+                        <div class="info-value">1949–2025 (76 let)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="story-text">
+            76 let meteoroloških meritev prikazuje trende zimskih pogojev v slovenskih Alpah. 
+            Podatki prikazujejo <span class="highlight">postopno zvišanje temperatur</span> in spremembe v snežnih razmerah.
+        </div>
+
+        <div class="compact-grid">
+            <div class="compact-stat">
+                <div class="compact-stat-number">+1.7°C</div>
+                <div class="compact-stat-label">Dvig temperature<br>1949 → 2025</div>
+            </div>
+            <div class="compact-stat">
+                <div class="compact-stat-number">-75 dni</div>
+                <div class="compact-stat-label">Manj dni s snežno odejo<br>skupaj (1949–2025)</div>
+            </div>
+            <div class="compact-stat">
+                <div class="compact-stat-number">-26.4°C</div>
+                <div class="compact-stat-label">Najnižja temperatura<br>17. januar 1985</div>
+            </div>
+            <div class="compact-stat">
+                <div class="compact-stat-number">240 cm</div>
+                <div class="compact-stat-label">Rekordna višina snega<br>1952</div>
+            </div>
+            <div class="compact-stat">
+                <div class="compact-stat-number">-2.2 dni</div>
+                <div class="compact-stat-label">
+                    <span class="tooltip-term">Ledenih dni
+                        <span class="tooltip-text">Dnevi ko maks. temp. ostane pod 0°C</span>
+                    </span><br>manj na desetletje
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Temperature Analysis -->
+    <div class="section">
+        <div class="story-text">
+            Na podlagi linearnega trenda iz obdobja 1949–2025 se temperatura v Ratečah 
+            <span class="highlight">zvišuje za 0.29°C na desetletje</span>. 
+            Če bi se trend nadaljeval, bi leta 2040 povprečna temperatura dosegla okoli 8.0°C.
+        </div>
+
+        <div class="story-text" style="margin-top: 1rem; font-size: 0.95rem; opacity: 0.8;">
+            Opomba: Projekcija temelji na preprostem linearnem trendu in ne upošteva kompleksnih podnebnih modelov. 
+            Dejanski razvoj je lahko drugačen.
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-title">Povprečne letne temperature in projekcija</div>
+            <canvas id="tempChart"></canvas>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="story-text">
+            Meritve kažejo <span class="highlight">opazno razliko</span> med posameznimi obdobji. 
+            Absolutne minimalne temperature so v zadnjih letih višje kot v prejšnjih desetletjih.
+        </div>
+
+        <div class="period-compare">
+            <div class="period-card">
+                <div class="period-title">1949–1979</div>
+                <div class="period-stat">
+                    <div class="period-stat-value">5.8°C</div>
+                    <div class="period-stat-label">Povprečna temperatura</div>
+                </div>
+                <div class="period-stat">
+                    <div class="period-stat-value">129 dni</div>
+                    <div class="period-stat-label">Dni s snežno odejo</div>
+                </div>
+                <div class="period-stat">
+                    <div class="period-stat-value">117 cm</div>
+                    <div class="period-stat-label">Maks. višina snega</div>
+                </div>
+            </div>
+
+            <div class="period-card">
+                <div class="period-title">1980–2004</div>
+                <div class="period-stat">
+                    <div class="period-stat-value">6.3°C</div>
+                    <div class="period-stat-label">Povprečna temperatura</div>
+                </div>
+                <div class="period-stat">
+                    <div class="period-stat-value">121 dni</div>
+                    <div class="period-stat-label">Dni s snežno odejo</div>
+                </div>
+                <div class="period-stat">
+                    <div class="period-stat-value">79 cm</div>
+                    <div class="period-stat-label">Maks. višina snega</div>
+                </div>
+            </div>
+
+            <div class="period-card">
+                <div class="period-title">2005–2025</div>
+                <div class="period-stat">
+                    <div class="period-stat-value">7.4°C</div>
+                    <div class="period-stat-label">Povprečna temperatura</div>
+                </div>
+                <div class="period-stat">
+                    <div class="period-stat-value">106 dni</div>
+                    <div class="period-stat-label">Dni s snežno odejo</div>
+                </div>
+                <div class="period-stat">
+                    <div class="period-stat-value">81 cm</div>
+                    <div class="period-stat-label">Maks. višina snega</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="story-text" style="text-align: center; margin-bottom: 2rem;">
+            <span class="highlight">Primerjava ekstremov:</span> Najhladnejša in najtoplejša zima v 76 letih meritev
+        </div>
+
+        <div class="comparison-grid">
+            <div class="comparison-card cold">
+                <div class="comparison-year">1978</div>
+                <div class="comparison-label">Najhladnejša zima</div>
+                <div class="comparison-stats">
+                    <div class="comparison-stat-row">
+                        <span class="comparison-stat-label">Povprečna temperatura</span>
+                        <span class="comparison-stat-value">4.6°C</span>
+                    </div>
+                    <div class="comparison-stat-row">
+                        <span class="comparison-stat-label">Absolutni minimum</span>
+                        <span class="comparison-stat-value">-21.2°C</span>
+                    </div>
+                    <div class="comparison-stat-row">
+                        <span class="comparison-stat-label">
+                            <span class="tooltip-term">Ledenih dni
+                                <span class="tooltip-text">Maks. temperatura pod 0°C</span>
+                            </span>
+                        </span>
+                        <span class="comparison-stat-value">40 dni</span>
+                    </div>
+                    <div class="comparison-stat-row">
+                        <span class="comparison-stat-label">Dni s snežno odejo</span>
+                        <span class="comparison-stat-value">155 dni</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="comparison-card warm">
+                <div class="comparison-year">2024</div>
+                <div class="comparison-label">Najtoplejša zima</div>
+                <div class="comparison-stats">
+                    <div class="comparison-stat-row">
+                        <span class="comparison-stat-label">Povprečna temperatura</span>
+                        <span class="comparison-stat-value">8.3°C</span>
+                    </div>
+                    <div class="comparison-stat-row">
+                        <span class="comparison-stat-label">Absolutni minimum</span>
+                        <span class="comparison-stat-value">-15.7°C</span>
+                    </div>
+                    <div class="comparison-stat-row">
+                        <span class="comparison-stat-label">
+                            <span class="tooltip-term">Ledenih dni
+                                <span class="tooltip-text">Maks. temperatura pod 0°C</span>
+                            </span>
+                        </span>
+                        <span class="comparison-stat-value">6 dni</span>
+                    </div>
+                    <div class="comparison-stat-row">
+                        <span class="comparison-stat-label">Dni s snežno odejo</span>
+                        <span class="comparison-stat-value">99 dni</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="chart-container">
+            <div class="chart-title">Ekstremne temperature skozi desetletja</div>
+            <canvas id="extremesChart"></canvas>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="story-text">
+            Analiza povprečnih in minimalnih temperatur kaže, da se 
+            <span class="highlight">obe komponenti segrevata s podobno hitrostjo</span> 
+            (okoli 0.29°C na desetletje).
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-title">Primerjava povprečnih in minimalnih temperatur</div>
+            <canvas id="tempComparisonChart"></canvas>
+        </div>
+
+        <div class="stat-grid">
+            <div class="stat-card">
+                <div class="stat-number">+0.29°C</div>
+                <div class="stat-label">Na desetletje</div>
+                <div class="stat-trend">Povprečni dvig temperature</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">-4.1 dni</div>
+                <div class="stat-label">Na desetletje</div>
+                <div class="stat-trend">Upad dni s snežno odejo</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">~8.0°C</div>
+                <div class="stat-label">Projekcija za 2040</div>
+                <div class="stat-trend">Če se trend nadaljuje</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Snow Analysis -->
+    <div class="section" style="margin-top: 2.5rem;">
+        <div class="story-text">
+            Snežne razmere se spreminjajo vzporedno s temperaturnim trendom. 
+            Podatki kažejo <span class="highlight">zmanjšanje dni s snežno odejo</span> skozi desetletja, 
+            čeprav z občutno variabilnostjo med posameznimi leti.
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-title">Maksimalna višina snega in dnevi s snežno odejo</div>
+            <canvas id="snowChart"></canvas>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="story-text">
+            Primerjava med dnevi s sneženjem in dnevi s snežno odejo 
+            kaže, da se <span class="highlight">snežna odeja krajša hitreje</span> kot število dni s sneženjem. 
+            To bi lahko nakazovalo višje temperature med zimo in hitrejše taljenje, čeprav je trend zelo variabilen.
+        </div>
+
+        <div class="story-text" style="margin-top: 1rem;">
+            V <span class="highlight">zadnjih letih</span> so opazne spremembe v količini snega. 
+            Leta 2025 je bila izmerjena maksimalna višina snega 18 cm, 
+            kar je občutno manj od zgodovinskega maksimuma 240 cm iz leta 1952.
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-title">
+                Sneženje vs. snežna odeja
+                <span style="font-size: 0.85rem; font-weight: 300; color: var(--soft-gray); margin-left: 1rem;">
+                    (razlika kaže hitrost taljenja)
+                </span>
+            </div>
+            <canvas id="snowComparisonChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Frost and Ice Days -->
+    <div class="section" style="margin-top: 2.5rem;">
+        <div class="story-text">
+            <span class="tooltip-term">Mrzli dnevi
+                <span class="tooltip-text">Min. temperatura pod 0°C</span>
+            </span> in 
+            <span class="tooltip-term">ledeni dnevi
+                <span class="tooltip-text">Maks. temperatura pod 0°C</span>
+            </span> se <span class="highlight">postopno zmanjšujejo</span>, 
+            čeprav je trend precejšen z veliko variabilnostjo med posameznimi leti.
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-title">Mrzli in ledeni dnevi skozi čas</div>
+            <canvas id="frostChart"></canvas>
+        </div>
+    </div>
+
+    <footer>
+        Vir: <a href="https://meteo.arso.gov.si/met/sl/app/webmet/#webmet==8Sdwx2bhR2cv0WZ0V2bvEGcw9ydlJWblR3LwVnaz9SYtVmYh9iclFGbt9SaulGdugXbsx3cs9mdl5WahxXYyNGapZXZ8tHZv1WYp5mOnMHbvZXZulWYnwCchJXYtVGdlJnOn0UQQdSf" target="_blank" style="color: var(--deep-blue); text-decoration: none; border-bottom: 1px solid var(--deep-blue); transition: opacity 0.3s;" onmouseover="this.style.opacity='0.6'" onmouseout="this.style.opacity='1'">ARSO, arhiv samodejnih postaj</a>, postaja Rateče · Analiza zajema obdobje 1949–2025
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
