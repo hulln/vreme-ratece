@@ -14,6 +14,12 @@ let data = {
 let projectionData = {};
 let tempModel = 'linear';
 let tempChartInstance = null;
+const isMobileViewport = window.matchMedia('(max-width: 768px)').matches;
+const chartAspectRatio = isMobileViewport ? 1.28 : 2.5;
+const chartLegendFontSize = isMobileViewport ? 10 : 12;
+const chartLegendPadding = isMobileViewport ? 9 : 15;
+const chartLegendPosition = isMobileViewport ? 'bottom' : 'top';
+const yearTickStep = isMobileViewport ? 20 : 10;
 const slNumberFormatters = {
     0: new Intl.NumberFormat('sl-SI', { minimumFractionDigits: 0, maximumFractionDigits: 0 }),
     1: new Intl.NumberFormat('sl-SI', { minimumFractionDigits: 1, maximumFractionDigits: 1 }),
@@ -63,6 +69,9 @@ async function loadCSV() {
         
         // Initialize charts after data is loaded
         initCharts();
+
+        // Mobile-only chart expansion controls
+        initMobileChartExpandControls();
     } catch (error) {
         console.error('Error loading CSV:', error);
     }
@@ -354,7 +363,7 @@ function initCharts() {
     options: {
         responsive: true,
         maintainAspectRatio: true,
-        aspectRatio: 2.5,
+        aspectRatio: chartAspectRatio,
         interaction: {
             mode: 'index',
             intersect: false
@@ -362,12 +371,12 @@ function initCharts() {
         plugins: {
             legend: {
                 display: true,
-                position: 'top',
+                position: chartLegendPosition,
                 align: 'end',
                 labels: {
                     boxWidth: 12,
-                    padding: 15,
-                    font: { size: 12 },
+                    padding: chartLegendPadding,
+                    font: { size: chartLegendFontSize },
                     filter: function(item) {
                         return !item.text.toLowerCase().includes('trend');
                     }
@@ -415,7 +424,7 @@ function initCharts() {
                     autoSkip: false,
                     callback: function(value, index, ticks) {
                         const year = parseInt(this.getLabelForValue(value));
-                        if ((year % 10 === 0 && year >= 1950 && year <= 2030) || year === 2035) {
+                        if ((year % yearTickStep === 0 && year >= 1950 && year <= 2030) || year === 2035) {
                             return year;
                         }
                         return '';
@@ -472,7 +481,7 @@ new Chart(snowCtx, {
     options: {
         responsive: true,
         maintainAspectRatio: true,
-        aspectRatio: 2.5,
+        aspectRatio: chartAspectRatio,
         interaction: {
             mode: 'index',
             intersect: false
@@ -480,12 +489,12 @@ new Chart(snowCtx, {
         plugins: {
             legend: {
                 display: true,
-                position: 'top',
+                position: chartLegendPosition,
                 align: 'end',
                 labels: {
                     boxWidth: 12,
-                    padding: 15,
-                    font: { size: 12 },
+                    padding: chartLegendPadding,
+                    font: { size: chartLegendFontSize },
                     filter: function(item) {
                         return item.text !== 'Trend';
                     }
@@ -569,7 +578,7 @@ new Chart(snowCtx, {
                     autoSkip: false,
                     callback: function(value, index, ticks) {
                         const year = parseInt(this.getLabelForValue(value));
-                        if (year % 10 === 0 && year >= 1950 && year <= 2020) {
+                        if (year % yearTickStep === 0 && year >= 1950 && year <= 2020) {
                             return year;
                         }
                         return '';
@@ -615,7 +624,7 @@ new Chart(extremesCtx, {
     options: {
         responsive: true,
         maintainAspectRatio: true,
-        aspectRatio: 2.5,
+        aspectRatio: chartAspectRatio,
         interaction: {
             mode: 'index',
             intersect: false
@@ -623,12 +632,12 @@ new Chart(extremesCtx, {
         plugins: {
             legend: {
                 display: true,
-                position: 'top',
+                position: chartLegendPosition,
                 align: 'end',
                 labels: {
                     boxWidth: 12,
-                    padding: 15,
-                    font: { size: 12 },
+                    padding: chartLegendPadding,
+                    font: { size: chartLegendFontSize },
                     filter: function(item) {
                         return item.text !== 'Trend';
                     }
@@ -683,7 +692,7 @@ new Chart(extremesCtx, {
                     autoSkip: false,
                     callback: function(value, index, ticks) {
                         const year = parseInt(this.getLabelForValue(value));
-                        if (year % 10 === 0 && year >= 1950 && year <= 2020) {
+                        if (year % yearTickStep === 0 && year >= 1950 && year <= 2020) {
                             return year;
                         }
                         return '';
@@ -752,7 +761,7 @@ new Chart(snowComparisonCtx, {
     options: {
         responsive: true,
         maintainAspectRatio: true,
-        aspectRatio: 2.5,
+        aspectRatio: chartAspectRatio,
         interaction: {
             mode: 'index',
             intersect: false
@@ -760,12 +769,12 @@ new Chart(snowComparisonCtx, {
         plugins: {
             legend: {
                 display: true,
-                position: 'top',
+                position: chartLegendPosition,
                 align: 'end',
                 labels: {
                     boxWidth: 12,
-                    padding: 15,
-                    font: { size: 12 },
+                    padding: chartLegendPadding,
+                    font: { size: chartLegendFontSize },
                     filter: function(item) {
                         return !item.text.includes('Trend');
                     }
@@ -841,7 +850,7 @@ new Chart(snowComparisonCtx, {
                     autoSkip: false,
                     callback: function(value, index, ticks) {
                         const year = parseInt(this.getLabelForValue(value));
-                        if (year % 10 === 0 && year >= 1950 && year <= 2020) {
+                        if (year % yearTickStep === 0 && year >= 1950 && year <= 2020) {
                             return year;
                         }
                         return '';
@@ -909,7 +918,7 @@ new Chart(frostCtx, {
     options: {
         responsive: true,
         maintainAspectRatio: true,
-        aspectRatio: 2.5,
+        aspectRatio: chartAspectRatio,
         interaction: {
             mode: 'index',
             intersect: false
@@ -917,12 +926,12 @@ new Chart(frostCtx, {
         plugins: {
             legend: {
                 display: true,
-                position: 'top',
+                position: chartLegendPosition,
                 align: 'end',
                 labels: {
                     boxWidth: 12,
-                    padding: 15,
-                    font: { size: 12 },
+                    padding: chartLegendPadding,
+                    font: { size: chartLegendFontSize },
                     filter: function(item) {
                         return !item.text.includes('Trend');
                     }
@@ -990,7 +999,7 @@ new Chart(frostCtx, {
                     autoSkip: false,
                     callback: function(value, index, ticks) {
                         const year = parseInt(this.getLabelForValue(value));
-                        if (year % 10 === 0 && year >= 1950 && year <= 2020) {
+                        if (year % yearTickStep === 0 && year >= 1950 && year <= 2020) {
                             return year;
                         }
                         return '';
@@ -1060,7 +1069,7 @@ new Chart(tempComparisonCtx, {
     options: {
         responsive: true,
         maintainAspectRatio: true,
-        aspectRatio: 2.5,
+        aspectRatio: chartAspectRatio,
         interaction: {
             mode: 'index',
             intersect: false
@@ -1068,12 +1077,12 @@ new Chart(tempComparisonCtx, {
         plugins: {
             legend: {
                 display: true,
-                position: 'top',
+                position: chartLegendPosition,
                 align: 'end',
                 labels: {
                     boxWidth: 12,
-                    padding: 15,
-                    font: { size: 12 },
+                    padding: chartLegendPadding,
+                    font: { size: chartLegendFontSize },
                     filter: function(item) {
                         return !item.text.includes('Trend');
                     }
@@ -1140,7 +1149,7 @@ new Chart(tempComparisonCtx, {
                     autoSkip: false,
                     callback: function(value, index, ticks) {
                         const year = parseInt(this.getLabelForValue(value));
-                        if (year % 10 === 0 && year >= 1950 && year <= 2020) {
+                        if (year % yearTickStep === 0 && year >= 1950 && year <= 2020) {
                             return year;
                         }
                         return '';
@@ -1168,6 +1177,40 @@ function updateLastUpdatedLabel() {
     }).format(dt);
 
     el.textContent = formatted;
+}
+
+function resizeAllCharts() {
+    if (!window.Chart || !Chart.instances) return;
+    Object.values(Chart.instances).forEach((chart) => {
+        if (chart && typeof chart.resize === 'function') chart.resize();
+    });
+}
+
+function initMobileChartExpandControls() {
+    const containers = Array.from(document.querySelectorAll('.chart-container')).filter((el) => el.querySelector('canvas'));
+
+    containers.forEach((container) => {
+        if (container.querySelector('.chart-expand-btn')) return;
+
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'chart-expand-btn';
+        button.textContent = 'Povecaj graf';
+        button.setAttribute('aria-expanded', 'false');
+        button.setAttribute('aria-label', 'Povecaj graf');
+
+        button.addEventListener('click', () => {
+            if (!window.matchMedia('(max-width: 768px)').matches) return;
+            const expanding = !container.classList.contains('is-expanded');
+            container.classList.toggle('is-expanded', expanding);
+            document.body.classList.toggle('chart-overlay-open', expanding);
+            button.textContent = expanding ? 'Zapri' : 'Povecaj graf';
+            button.setAttribute('aria-expanded', expanding ? 'true' : 'false');
+            setTimeout(resizeAllCharts, 20);
+        });
+
+        container.appendChild(button);
+    });
 }
 
 // Load CSV data and initialize charts
