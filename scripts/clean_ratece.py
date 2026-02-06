@@ -1,8 +1,8 @@
 import pandas as pd
 from pathlib import Path
 
-SRC_PATH = Path("src/1bs8xpBJ")
-OUT_PATH = Path("output/clean_ratece.csv")
+SRC_PATH = Path("data/raw/1bs8xpBJ")
+OUT_PATH = Path("data/clean_ratece.csv")
 
 
 def main() -> None:

@@ -3,7 +3,7 @@ import numpy as np
 from scipy import stats
 
 # Load data
-df = pd.read_csv('output/clean_ratece.csv')
+df = pd.read_csv('data/clean_ratece.csv')
 df = df[df['leto'] >= 1949].copy()
 
 print("=== TREND ANALYSIS ===\n")
