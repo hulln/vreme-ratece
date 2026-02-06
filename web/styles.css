@@ -1003,9 +1003,9 @@
 
             .chart-expand-btn {
                 display: inline-flex;
-                position: absolute;
-                top: 0.65rem;
-                right: 0.65rem;
+                position: relative;
+                margin-left: auto;
+                margin-bottom: 0.65rem;
                 z-index: 5;
                 border: 1px solid rgba(26, 77, 109, 0.2);
                 background: #fff;
@@ -1044,6 +1044,7 @@
                 position: fixed;
                 top: 0.8rem;
                 right: 0.8rem;
+                margin: 0;
             }
             
             .stat-grid {

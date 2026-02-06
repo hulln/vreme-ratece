@@ -1186,6 +1186,42 @@ function resizeAllCharts() {
     });
 }
 
+async function requestLandscapeFullscreen(targetEl) {
+    try {
+        if (targetEl.requestFullscreen) {
+            await targetEl.requestFullscreen();
+        }
+    } catch (e) {
+        // Fullscreen may be unsupported or blocked by browser policy.
+    }
+
+    try {
+        if (screen.orientation && screen.orientation.lock) {
+            await screen.orientation.lock('landscape');
+        }
+    } catch (e) {
+        // Orientation lock is unsupported on many mobile browsers (e.g. iOS Safari).
+    }
+}
+
+async function exitLandscapeFullscreen() {
+    try {
+        if (screen.orientation && screen.orientation.unlock) {
+            screen.orientation.unlock();
+        }
+    } catch (e) {
+        // ignore
+    }
+
+    try {
+        if (document.fullscreenElement && document.exitFullscreen) {
+            await document.exitFullscreen();
+        }
+    } catch (e) {
+        // ignore
+    }
+}
+
 function initMobileChartExpandControls() {
     const containers = Array.from(document.querySelectorAll('.chart-container')).filter((el) => el.querySelector('canvas'));
 
@@ -1195,21 +1231,44 @@ function initMobileChartExpandControls() {
         const button = document.createElement('button');
         button.type = 'button';
         button.className = 'chart-expand-btn';
-        button.textContent = 'Povecaj graf';
+        button.textContent = 'Povečaj graf';
         button.setAttribute('aria-expanded', 'false');
-        button.setAttribute('aria-label', 'Povecaj graf');
+        button.setAttribute('aria-label', 'Povečaj graf');
 
-        button.addEventListener('click', () => {
+        button.addEventListener('click', async () => {
             if (!window.matchMedia('(max-width: 768px)').matches) return;
             const expanding = !container.classList.contains('is-expanded');
             container.classList.toggle('is-expanded', expanding);
             document.body.classList.toggle('chart-overlay-open', expanding);
-            button.textContent = expanding ? 'Zapri' : 'Povecaj graf';
+            button.textContent = expanding ? 'Zapri' : 'Povečaj graf';
             button.setAttribute('aria-expanded', expanding ? 'true' : 'false');
+            if (expanding) {
+                await requestLandscapeFullscreen(container);
+            } else {
+                await exitLandscapeFullscreen();
+            }
             setTimeout(resizeAllCharts, 20);
         });
 
-        container.appendChild(button);
+        const title = container.querySelector('.chart-title');
+        if (title) {
+            container.insertBefore(button, title);
+        } else {
+            container.appendChild(button);
+        }
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+        if (document.fullscreenElement) return;
+        document.body.classList.remove('chart-overlay-open');
+        containers.forEach((container) => {
+            container.classList.remove('is-expanded');
+            const btn = container.querySelector('.chart-expand-btn');
+            if (!btn) return;
+            btn.textContent = 'Povečaj graf';
+            btn.setAttribute('aria-expanded', 'false');
+        });
+        setTimeout(resizeAllCharts, 20);
     });
 }
 
