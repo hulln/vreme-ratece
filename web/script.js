@@ -69,9 +69,6 @@ async function loadCSV() {
         
         // Initialize charts after data is loaded
         initCharts();
-
-        // Mobile-only chart expansion controls
-        initMobileChartExpandControls();
     } catch (error) {
         console.error('Error loading CSV:', error);
     }
@@ -1184,45 +1181,6 @@ function resizeAllCharts() {
     Object.values(Chart.instances).forEach((chart) => {
         if (chart && typeof chart.resize === 'function') chart.resize();
     });
-}
-
-function initMobileChartExpandControls() {
-    const containers = Array.from(document.querySelectorAll('.chart-container')).filter((el) => el.querySelector('canvas'));
-
-    containers.forEach((container) => {
-        if (container.querySelector('.chart-expand-btn')) return;
-
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.className = 'chart-expand-btn';
-        button.textContent = 'Povečaj graf';
-        button.setAttribute('aria-expanded', 'false');
-        button.setAttribute('aria-label', 'Povečaj graf');
-
-        button.addEventListener('click', () => {
-            if (!window.matchMedia('(max-width: 768px)').matches) return;
-            const expanding = !container.classList.contains('is-expanded');
-            container.classList.toggle('is-expanded', expanding);
-            document.body.classList.toggle('chart-overlay-open', expanding);
-            button.textContent = expanding ? 'Zapri' : 'Povečaj graf';
-            button.setAttribute('aria-expanded', expanding ? 'true' : 'false');
-            setTimeout(resizeAllCharts, 20);
-        });
-
-        const title = container.querySelector('.chart-title');
-        if (title) {
-            let toolbar = container.querySelector('.chart-toolbar');
-            if (!toolbar) {
-                toolbar = document.createElement('div');
-                toolbar.className = 'chart-toolbar';
-                container.insertBefore(toolbar, title);
-            }
-            toolbar.appendChild(button);
-        } else {
-            container.appendChild(button);
-        }
-    });
-
 }
 
 // Load CSV data and initialize charts
