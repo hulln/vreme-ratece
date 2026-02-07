@@ -1,6 +1,7 @@
 # vreme-ratece
 
 Analiza zimskih podatkov za Rateče (1949–2025) + enostavna spletna predstavitev.
+Projekt je bil vibecodan s pomočjo ChatGPT in Claude.
 
 ## Spletni prikaz
 - https://zime.oblachek.eu
