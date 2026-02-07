@@ -1085,22 +1085,21 @@
             }
 
             .tooltip-icon .tooltip-text {
-                position: absolute;
+                position: fixed;
                 left: 50%;
-                bottom: 125%;
+                top: 18vh;
+                bottom: auto;
                 right: auto;
-                top: auto;
-                transform: translateX(-38%);
-                width: min(88vw, 300px);
+                transform: translateX(-50%);
+                width: min(90vw, 320px);
                 text-align: left;
-                z-index: 1000;
+                max-height: 62vh;
+                overflow: auto;
+                z-index: 2000;
             }
 
             .tooltip-icon .tooltip-text::after {
-                display: block;
-                left: 38%;
-                right: auto;
-                transform: translateX(-50%);
+                display: none;
             }
 
             .tooltip-text::after {
