@@ -912,6 +912,28 @@
             vertical-align: middle;
         }
 
+        .period-summary-text .tooltip-icon {
+            position: static;
+        }
+
+        .period-summary-text .tooltip-icon .tooltip-text {
+            position: absolute;
+            left: 50%;
+            right: auto;
+            top: 0;
+            bottom: auto;
+            transform: translateX(-50%);
+            width: min(92vw, 460px);
+            max-width: 460px;
+            text-align: left;
+        }
+
+        .period-summary-text .tooltip-icon .tooltip-text::after {
+            left: var(--period-tooltip-arrow-x, 50%);
+            right: auto;
+            transform: translateX(-50%);
+        }
+
         .tooltip-text {
             visibility: hidden;
             opacity: 0;
@@ -1091,6 +1113,28 @@
             .tooltip-icon {
                 width: 1.2em;
                 height: 1.2em;
+            }
+
+            .period-summary-text .tooltip-icon .tooltip-text {
+                position: absolute;
+                left: 50%;
+                top: 0;
+                bottom: auto;
+                right: auto;
+                transform: translateX(-50%);
+                width: min(94vw, 320px);
+                max-width: 320px;
+                text-align: left;
+                max-height: none;
+                overflow: visible;
+                z-index: 1000;
+            }
+
+            .period-summary-text .tooltip-icon .tooltip-text::after {
+                display: block;
+                left: var(--period-tooltip-arrow-x, 50%);
+                right: auto;
+                transform: translateX(-50%);
             }
 
             .tooltip-text::after {
