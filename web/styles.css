@@ -1085,15 +1085,20 @@
             }
 
             .tooltip-icon .tooltip-text {
+                position: absolute;
                 left: 50%;
+                bottom: 125%;
                 right: auto;
-                transform: translateX(-50%);
+                top: auto;
+                transform: translateX(-38%);
                 width: min(88vw, 300px);
                 text-align: left;
+                z-index: 1000;
             }
 
             .tooltip-icon .tooltip-text::after {
-                left: 50%;
+                display: block;
+                left: 38%;
                 right: auto;
                 transform: translateX(-50%);
             }
