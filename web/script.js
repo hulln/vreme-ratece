@@ -14,7 +14,6 @@ let data = {
 let projectionData = {};
 let tempModel = 'linear';
 let tempChartInstance = null;
-const chartInstances = {};
 const isMobileViewport = window.matchMedia('(max-width: 768px)').matches;
 const chartAspectRatio = isMobileViewport ? 1.28 : 2.5;
 const chartLegendFontSize = isMobileViewport ? 10 : 12;
@@ -70,7 +69,6 @@ async function loadCSV() {
         
         // Initialize charts after data is loaded
         initCharts();
-        initChartExportButtons();
     } catch (error) {
         console.error('Error loading CSV:', error);
     }
@@ -300,130 +298,6 @@ function calculateProjections() {
 Chart.defaults.font.family = "'Lexend', 'Segoe UI', system-ui, -apple-system, sans-serif";
 Chart.defaults.color = '#5a6c7d';
 
-function deepCloneChartConfig(value) {
-    if (Array.isArray(value)) return value.map(deepCloneChartConfig);
-    if (value && typeof value === 'object') {
-        const clone = {};
-        Object.keys(value).forEach((key) => {
-            clone[key] = deepCloneChartConfig(value[key]);
-        });
-        return clone;
-    }
-    return value;
-}
-
-function downloadBlob(blob, filename) {
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    URL.revokeObjectURL(url);
-}
-
-function waitForChartRender() {
-    return new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-}
-
-async function exportChartAsPng(chartId, triggerBtn) {
-    const sourceChart = chartInstances[chartId];
-    if (!sourceChart) return;
-
-    const exportWidth = 1800;
-    const exportAspect = sourceChart.options?.aspectRatio || 2.5;
-    const exportHeight = Math.max(700, Math.round(exportWidth / exportAspect));
-
-    const exportCanvas = document.createElement('canvas');
-    exportCanvas.width = exportWidth;
-    exportCanvas.height = exportHeight;
-    const exportCtx = exportCanvas.getContext('2d');
-
-    const baseData = deepCloneChartConfig(sourceChart.config?.data || sourceChart.data || {});
-    const datasets = Array.isArray(baseData.datasets) ? baseData.datasets : [];
-    datasets.forEach((dataset, index) => {
-        dataset.hidden = !sourceChart.isDatasetVisible(index);
-        if (Array.isArray(dataset.data)) dataset.data = dataset.data.slice();
-    });
-
-    const exportData = {
-        labels: Array.isArray(baseData.labels) ? baseData.labels.slice() : [],
-        datasets
-    };
-
-    const exportOptions = deepCloneChartConfig(sourceChart.config?.options || {});
-    exportOptions.responsive = false;
-    exportOptions.maintainAspectRatio = false;
-    exportOptions.animation = false;
-    exportOptions.devicePixelRatio = 2;
-    exportOptions.events = [];
-
-    const exportChart = new Chart(exportCtx, {
-        type: sourceChart.config.type,
-        data: exportData,
-        options: exportOptions
-    });
-
-    await waitForChartRender();
-
-    const stamp = new Date().toISOString().slice(0, 10);
-    const filename = `${chartId}-${stamp}.png`;
-    const finalize = () => {
-        exportChart.destroy();
-        if (triggerBtn) {
-            triggerBtn.disabled = false;
-            triggerBtn.textContent = 'Shrani PNG';
-        }
-    };
-
-    if (typeof exportCanvas.toBlob === 'function') {
-        exportCanvas.toBlob((blob) => {
-            if (blob) {
-                downloadBlob(blob, filename);
-            } else {
-                const link = document.createElement('a');
-                link.href = exportCanvas.toDataURL('image/png');
-                link.download = filename;
-                document.body.appendChild(link);
-                link.click();
-                link.remove();
-            }
-            finalize();
-        }, 'image/png');
-        return;
-    }
-
-    const link = document.createElement('a');
-    link.href = exportCanvas.toDataURL('image/png');
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    finalize();
-}
-
-function initChartExportButtons() {
-    const buttons = document.querySelectorAll('.chart-export-btn');
-    buttons.forEach((btn) => {
-        if (btn.dataset.bound === '1') return;
-        btn.dataset.bound = '1';
-        btn.addEventListener('click', async () => {
-            const chartId = btn.dataset.chartId;
-            if (!chartId || !chartInstances[chartId]) return;
-            btn.disabled = true;
-            btn.textContent = 'Shranjujem...';
-            try {
-                await exportChartAsPng(chartId, btn);
-            } catch (error) {
-                console.error('Napaka pri izvozu grafa:', error);
-                btn.disabled = false;
-                btn.textContent = 'Shrani PNG';
-            }
-        });
-    });
-}
-
 function initCharts() {
     // Temperature Chart with Projection
     const tempCtx = document.getElementById('tempChart').getContext('2d');
@@ -562,12 +436,11 @@ function initCharts() {
         }
     }
 });
-chartInstances.tempChart = tempChartInstance;
 
 // Snow Chart
 const snowCtx = document.getElementById('snowChart').getContext('2d');
 const snowDaysTrend = calculateTrendLine(data.years, data.snowDays);
-const snowChartInstance = new Chart(snowCtx, {
+new Chart(snowCtx, {
     type: 'bar',
     data: {
         labels: data.years,
@@ -717,12 +590,11 @@ const snowChartInstance = new Chart(snowCtx, {
         }
     }
 });
-chartInstances.snowChart = snowChartInstance;
 
 // Extremes Chart
 const extremesCtx = document.getElementById('extremesChart').getContext('2d');
 const extremesTrend = calculateTrendLine(data.years, data.minTemp);
-const extremesChartInstance = new Chart(extremesCtx, {
+new Chart(extremesCtx, {
     type: 'line',
     data: {
         labels: data.years,
@@ -832,13 +704,12 @@ const extremesChartInstance = new Chart(extremesCtx, {
         }
     }
 });
-chartInstances.extremesChart = extremesChartInstance;
 
 // Snow Comparison Chart (snowfall vs snow cover)
 const snowComparisonCtx = document.getElementById('snowComparisonChart').getContext('2d');
 const snowCoverTrend = calculateTrendLine(data.years, data.snowDays);
 const snowfallTrend = calculateTrendLine(data.years, data.snowfallDays);
-const snowComparisonChartInstance = new Chart(snowComparisonCtx, {
+new Chart(snowComparisonCtx, {
     type: 'line',
     data: {
         labels: data.years,
@@ -991,13 +862,12 @@ const snowComparisonChartInstance = new Chart(snowComparisonCtx, {
         }
     }
 });
-chartInstances.snowComparisonChart = snowComparisonChartInstance;
 
 // Frost vs Ice Days Chart
 const frostCtx = document.getElementById('frostChart').getContext('2d');
 const frostTrend = calculateTrendLine(data.years, data.frostDays);
 const iceTrend = calculateTrendLine(data.years, data.iceDays);
-const frostChartInstance = new Chart(frostCtx, {
+new Chart(frostCtx, {
     type: 'line',
     data: {
         labels: data.years,
@@ -1141,7 +1011,6 @@ const frostChartInstance = new Chart(frostCtx, {
         }
     }
 });
-chartInstances.frostChart = frostChartInstance;
 
 // Temperature Comparison Chart (avg vs avg min)
 const tempComparisonEl = document.getElementById('tempComparisonChart');

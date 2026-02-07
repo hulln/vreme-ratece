@@ -229,50 +229,6 @@
             letter-spacing: -0.01em;
         }
 
-        .chart-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 0.8rem;
-        }
-
-        .chart-header .chart-title {
-            flex: 1 1 320px;
-            min-width: 0;
-            margin-bottom: 1rem;
-        }
-
-        .chart-export-btn {
-            border: 1px solid rgba(26, 77, 109, 0.2);
-            border-radius: 8px;
-            padding: 0.35rem 0.6rem;
-            background: #fff;
-            color: var(--deep-blue);
-            font-family: 'Lexend', 'Segoe UI', system-ui, -apple-system, sans-serif;
-            font-weight: 500;
-            font-size: 0.88rem;
-            line-height: 1.2;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: background-color 0.2s ease, border-color 0.2s ease;
-        }
-
-        .chart-export-btn:hover {
-            border-color: rgba(26, 77, 109, 0.35);
-            background: rgba(26, 77, 109, 0.06);
-        }
-
-        .chart-export-btn:focus-visible {
-            outline: 2px solid rgba(44, 95, 125, 0.5);
-            outline-offset: 2px;
-        }
-
-        .chart-export-btn[disabled] {
-            opacity: 0.7;
-            cursor: wait;
-        }
-
         .stats-disclosure {
             background: #fff;
             border: 1px solid rgba(26, 77, 109, 0.08);
@@ -1157,22 +1113,6 @@
             .tooltip-icon {
                 width: 1.2em;
                 height: 1.2em;
-            }
-
-            .chart-header {
-                align-items: flex-start;
-                gap: 0.45rem;
-            }
-
-            .chart-header .chart-title {
-                flex-basis: 100%;
-                margin-bottom: 0.35rem;
-            }
-
-            .chart-export-btn {
-                font-size: 0.84rem;
-                padding: 0.32rem 0.56rem;
-                align-self: flex-start;
             }
 
             .period-summary-text .tooltip-icon .tooltip-text {
