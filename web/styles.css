@@ -901,6 +901,13 @@
             vertical-align: middle;
         }
 
+        .tooltip-icon .tooltip-text {
+            left: 50%;
+            right: auto;
+            transform: translateX(-50%);
+            text-align: center;
+        }
+
         .tooltip-text {
             visibility: hidden;
             opacity: 0;
@@ -1075,6 +1082,20 @@
             .tooltip-icon {
                 width: 1.2em;
                 height: 1.2em;
+            }
+
+            .tooltip-icon .tooltip-text {
+                left: 50%;
+                right: auto;
+                transform: translateX(-50%);
+                width: min(88vw, 300px);
+                text-align: left;
+            }
+
+            .tooltip-icon .tooltip-text::after {
+                left: 50%;
+                right: auto;
+                transform: translateX(-50%);
             }
 
             .tooltip-text::after {
