@@ -1176,6 +1176,31 @@ function updateLastUpdatedLabel() {
     el.textContent = formatted;
 }
 
+function clampPeriodTooltipBubble() {
+    const container = document.querySelector('.period-summary-text');
+    if (!container) return;
+    const icon = container.querySelector('.tooltip-icon');
+    const bubble = icon ? icon.querySelector('.tooltip-text') : null;
+    if (!icon || !bubble) return;
+
+    const containerRect = container.getBoundingClientRect();
+    const iconRect = icon.getBoundingClientRect();
+    const bubbleWidth = bubble.offsetWidth || Math.min(containerRect.width * 0.92, 460);
+
+    const desiredCenter = iconRect.left - containerRect.left + iconRect.width / 2;
+    const pad = 8;
+    const minCenter = bubbleWidth / 2 + pad;
+    const maxCenter = containerRect.width - bubbleWidth / 2 - pad;
+    const clampedCenter = Math.max(minCenter, Math.min(maxCenter, desiredCenter));
+
+    bubble.style.left = `${clampedCenter}px`;
+    bubble.style.transform = 'translateX(-50%)';
+
+    const arrowX = desiredCenter - clampedCenter + bubbleWidth / 2;
+    const clampedArrowX = Math.max(14, Math.min(bubbleWidth - 14, arrowX));
+    bubble.style.setProperty('--period-tooltip-arrow-x', `${clampedArrowX}px`);
+}
+
 function resizeAllCharts() {
     if (!window.Chart || !Chart.instances) return;
     Object.values(Chart.instances).forEach((chart) => {
@@ -1185,4 +1210,11 @@ function resizeAllCharts() {
 
 // Load CSV data and initialize charts
 updateLastUpdatedLabel();
+clampPeriodTooltipBubble();
+window.addEventListener('resize', clampPeriodTooltipBubble);
+const periodTooltipIcon = document.querySelector('.period-summary-text .tooltip-icon');
+if (periodTooltipIcon) {
+    periodTooltipIcon.addEventListener('mouseenter', clampPeriodTooltipBubble);
+    periodTooltipIcon.addEventListener('focus', clampPeriodTooltipBubble);
+}
 loadCSV();

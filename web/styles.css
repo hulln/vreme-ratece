@@ -319,6 +319,10 @@
             font-weight: 400;
         }
 
+        .period-summary-text {
+            position: relative;
+        }
+
         .story-heading-primary {
             margin-top: 1.5rem;
             font-weight: 600;
@@ -901,11 +905,25 @@
             vertical-align: middle;
         }
 
-        .tooltip-icon .tooltip-text {
+        .period-summary-text .tooltip-icon {
+            position: static;
+        }
+
+        .period-summary-text .tooltip-icon .tooltip-text {
+            position: absolute;
             left: 50%;
             right: auto;
+            bottom: calc(100% + 0.2rem);
             transform: translateX(-50%);
-            text-align: center;
+            width: min(92%, 460px);
+            max-width: 92%;
+            text-align: left;
+        }
+
+        .period-summary-text .tooltip-icon .tooltip-text::after {
+            left: var(--period-tooltip-arrow-x, 50%);
+            right: auto;
+            transform: translateX(-50%);
         }
 
         .tooltip-text {
@@ -1084,22 +1102,25 @@
                 height: 1.2em;
             }
 
-            .tooltip-icon .tooltip-text {
-                position: fixed;
+            .period-summary-text .tooltip-icon .tooltip-text {
+                position: absolute;
                 left: 50%;
-                top: 18vh;
-                bottom: auto;
+                bottom: calc(100% + 0.2rem);
                 right: auto;
                 transform: translateX(-50%);
-                width: min(90vw, 320px);
+                width: min(94%, 320px);
+                max-width: 94%;
                 text-align: left;
-                max-height: 62vh;
-                overflow: auto;
-                z-index: 2000;
+                max-height: none;
+                overflow: visible;
+                z-index: 1000;
             }
 
-            .tooltip-icon .tooltip-text::after {
-                display: none;
+            .period-summary-text .tooltip-icon .tooltip-text::after {
+                display: block;
+                left: var(--period-tooltip-arrow-x, 50%);
+                right: auto;
+                transform: translateX(-50%);
             }
 
             .tooltip-text::after {
