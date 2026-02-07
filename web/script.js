@@ -1192,10 +1192,9 @@ function clampPeriodTooltipBubble() {
         const isMobile = window.matchMedia('(max-width: 768px)').matches;
         const sidePad = isMobile ? 12 : 14;
         const verticalGap = 6;
-        const viewportPad = 8;
 
         // Reset before measuring
-        bubble.style.position = 'fixed';
+        bubble.style.position = 'absolute';
         bubble.style.left = '50%';
         bubble.style.top = '0px';
         bubble.style.bottom = 'auto';
@@ -1215,21 +1214,17 @@ function clampPeriodTooltipBubble() {
         void bubble.offsetWidth;
         const bubbleRect = bubble.getBoundingClientRect();
 
-        const iconCenterX = iconRect.left + (iconRect.width / 2);
+        const iconCenterX = iconRect.left - containerRect.left + (iconRect.width / 2);
         const bubbleWidth = bubbleRect.width;
-        const minCenterByText = containerRect.left + (bubbleWidth / 2) + sidePad;
-        const maxCenterByText = containerRect.right - (bubbleWidth / 2) - sidePad;
-        const minCenterByViewport = viewportPad + (bubbleWidth / 2);
-        const maxCenterByViewport = window.innerWidth - viewportPad - (bubbleWidth / 2);
-        const minCenter = Math.max(minCenterByText, minCenterByViewport);
-        const maxCenter = Math.min(maxCenterByText, maxCenterByViewport);
+        const minCenter = (bubbleWidth / 2) + sidePad;
+        const maxCenter = containerRect.width - (bubbleWidth / 2) - sidePad;
         const clampedCenter = Math.max(minCenter, Math.min(maxCenter, iconCenterX));
 
         bubble.style.left = `${clampedCenter}px`;
         bubble.style.transform = 'translateX(-50%)';
 
-        const bubbleTop = iconRect.top - bubbleRect.height - verticalGap;
-        bubble.style.top = `${Math.max(viewportPad, bubbleTop)}px`;
+        const bubbleTop = (iconRect.top - containerRect.top) - bubbleRect.height - verticalGap;
+        bubble.style.top = `${Math.max(4, bubbleTop)}px`;
 
         const bubbleLeft = clampedCenter - bubbleWidth / 2;
         const arrowX = ((iconCenterX - bubbleLeft) / bubbleWidth) * 100;
@@ -1262,33 +1257,21 @@ function positionTooltip(term) {
         const bubbleRect = bubble.getBoundingClientRect();
         const viewportWidth = window.innerWidth;
         const pad = 16;
-        
-        // Check if tooltip overflows on right
-        const overflowRight = bubbleRect.right - viewportWidth + pad;
-        // Check if tooltip overflows on left
-        const overflowLeft = pad - bubbleRect.left;
-        
-        if (overflowRight > 0) {
-            // Shift left
-            const currentLeft = bubbleRect.left - termRect.left;
-            const newLeft = currentLeft - overflowRight;
-            bubble.style.left = `${newLeft}px`;
-            bubble.style.transform = 'none';
-            
-            // Adjust arrow
-            const arrowOffset = overflowRight;
-            bubble.style.setProperty('--tooltip-arrow-x', `calc(50% + ${arrowOffset}px)`);
-        } else if (overflowLeft > 0) {
-            // Shift right
-            const currentLeft = bubbleRect.left - termRect.left;
-            const newLeft = currentLeft + overflowLeft;
-            bubble.style.left = `${newLeft}px`;
-            bubble.style.transform = 'none';
-            
-            // Adjust arrow
-            const arrowOffset = -overflowLeft;
-            bubble.style.setProperty('--tooltip-arrow-x', `calc(50% + ${arrowOffset}px)`);
-        }
+
+        const desiredCenter = termRect.left + (termRect.width / 2);
+        const bubbleWidth = bubbleRect.width;
+        const minCenter = pad + (bubbleWidth / 2);
+        const maxCenter = viewportWidth - pad - (bubbleWidth / 2);
+        const clampedCenter = Math.max(minCenter, Math.min(maxCenter, desiredCenter));
+
+        const localLeft = clampedCenter - termRect.left;
+        bubble.style.left = `${localLeft}px`;
+        bubble.style.transform = 'translateX(-50%)';
+
+        const bubbleLeft = clampedCenter - (bubbleWidth / 2);
+        const arrowX = ((desiredCenter - bubbleLeft) / bubbleWidth) * 100;
+        const clampedArrow = Math.max(7, Math.min(93, arrowX));
+        bubble.style.setProperty('--tooltip-arrow-x', `${clampedArrow}%`);
     });
 }
 
@@ -1320,7 +1303,6 @@ window.addEventListener('resize', () => {
     clampPeriodTooltipBubble();
     clampAllTooltips();
 });
-window.addEventListener('scroll', clampPeriodTooltipBubble, { passive: true });
 const periodTooltipIcon = document.querySelector('.period-summary-text .tooltip-icon');
 if (periodTooltipIcon) {
     periodTooltipIcon.addEventListener('mouseenter', clampPeriodTooltipBubble);
