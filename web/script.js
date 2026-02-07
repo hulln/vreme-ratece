@@ -395,7 +395,12 @@ function initCharts() {
                         if (context.dataset.label.toLowerCase().includes('trend')) {
                             return null;
                         }
-                        return context.dataset.label + ': ' + formatSl(context.parsed.y, 1) + ' °C';
+                        const year = context.label;
+                        const value = formatSl(context.parsed.y, 1) + ' °C';
+                        if (context.dataset.label.toLowerCase().includes('projekcija')) {
+                            return year + ': ' + value;
+                        }
+                        return context.dataset.label + ': ' + value;
                     }
                 }
             }
@@ -1183,22 +1188,121 @@ function clampPeriodTooltipBubble() {
     const bubble = icon ? icon.querySelector('.tooltip-text') : null;
     if (!icon || !bubble) return;
 
-    const containerRect = container.getBoundingClientRect();
-    const iconRect = icon.getBoundingClientRect();
-    const bubbleWidth = bubble.offsetWidth || Math.min(containerRect.width * 0.92, 460);
+    requestAnimationFrame(() => {
+        const isMobile = window.matchMedia('(max-width: 768px)').matches;
+        const sidePad = isMobile ? 12 : 14;
+        const verticalGap = 6;
+        const viewportPad = 8;
 
-    const desiredCenter = iconRect.left - containerRect.left + iconRect.width / 2;
-    const pad = 8;
-    const minCenter = bubbleWidth / 2 + pad;
-    const maxCenter = containerRect.width - bubbleWidth / 2 - pad;
-    const clampedCenter = Math.max(minCenter, Math.min(maxCenter, desiredCenter));
+        // Reset before measuring
+        bubble.style.position = 'fixed';
+        bubble.style.left = '50%';
+        bubble.style.top = '0px';
+        bubble.style.bottom = 'auto';
+        bubble.style.transform = 'translateX(-50%)';
+        bubble.style.width = '';
+        bubble.style.maxWidth = '';
+        bubble.style.removeProperty('--period-tooltip-arrow-x');
 
-    bubble.style.left = `${clampedCenter}px`;
-    bubble.style.transform = 'translateX(-50%)';
+        const iconRect = icon.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
 
-    const arrowX = desiredCenter - clampedCenter + bubbleWidth / 2;
-    const clampedArrowX = Math.max(14, Math.min(bubbleWidth - 14, arrowX));
-    bubble.style.setProperty('--period-tooltip-arrow-x', `${clampedArrowX}px`);
+        const maxWidth = Math.max(220, containerRect.width - sidePad * 2);
+        const targetMax = isMobile ? Math.min(320, maxWidth) : Math.min(460, maxWidth);
+        bubble.style.maxWidth = `${targetMax}px`;
+
+        // Re-measure with max width applied.
+        void bubble.offsetWidth;
+        const bubbleRect = bubble.getBoundingClientRect();
+
+        const iconCenterX = iconRect.left + (iconRect.width / 2);
+        const bubbleWidth = bubbleRect.width;
+        const minCenterByText = containerRect.left + (bubbleWidth / 2) + sidePad;
+        const maxCenterByText = containerRect.right - (bubbleWidth / 2) - sidePad;
+        const minCenterByViewport = viewportPad + (bubbleWidth / 2);
+        const maxCenterByViewport = window.innerWidth - viewportPad - (bubbleWidth / 2);
+        const minCenter = Math.max(minCenterByText, minCenterByViewport);
+        const maxCenter = Math.min(maxCenterByText, maxCenterByViewport);
+        const clampedCenter = Math.max(minCenter, Math.min(maxCenter, iconCenterX));
+
+        bubble.style.left = `${clampedCenter}px`;
+        bubble.style.transform = 'translateX(-50%)';
+
+        const bubbleTop = iconRect.top - bubbleRect.height - verticalGap;
+        bubble.style.top = `${Math.max(viewportPad, bubbleTop)}px`;
+
+        const bubbleLeft = clampedCenter - bubbleWidth / 2;
+        const arrowX = ((iconCenterX - bubbleLeft) / bubbleWidth) * 100;
+        const clampedArrow = Math.max(7, Math.min(93, arrowX));
+        bubble.style.setProperty('--period-tooltip-arrow-x', `${clampedArrow}%`);
+    });
+}
+
+function initPeriodTooltipToggle() {
+    // Intentionally disabled: period tooltip uses hover/focus, not click toggle.
+}
+
+function positionTooltip(term) {
+    const bubble = term.querySelector('.tooltip-text');
+    if (!bubble) return;
+    
+    requestAnimationFrame(() => {
+        // Reset to default positioning first
+        bubble.style.position = 'absolute';
+        bubble.style.left = '50%';
+        bubble.style.transform = 'translateX(-50%)';
+        bubble.style.width = '';
+        bubble.style.maxWidth = '';
+        bubble.style.removeProperty('--tooltip-arrow-x');
+        
+        // Force reflow
+        void bubble.offsetWidth;
+        
+        const termRect = term.getBoundingClientRect();
+        const bubbleRect = bubble.getBoundingClientRect();
+        const viewportWidth = window.innerWidth;
+        const pad = 16;
+        
+        // Check if tooltip overflows on right
+        const overflowRight = bubbleRect.right - viewportWidth + pad;
+        // Check if tooltip overflows on left
+        const overflowLeft = pad - bubbleRect.left;
+        
+        if (overflowRight > 0) {
+            // Shift left
+            const currentLeft = bubbleRect.left - termRect.left;
+            const newLeft = currentLeft - overflowRight;
+            bubble.style.left = `${newLeft}px`;
+            bubble.style.transform = 'none';
+            
+            // Adjust arrow
+            const arrowOffset = overflowRight;
+            bubble.style.setProperty('--tooltip-arrow-x', `calc(50% + ${arrowOffset}px)`);
+        } else if (overflowLeft > 0) {
+            // Shift right
+            const currentLeft = bubbleRect.left - termRect.left;
+            const newLeft = currentLeft + overflowLeft;
+            bubble.style.left = `${newLeft}px`;
+            bubble.style.transform = 'none';
+            
+            // Adjust arrow
+            const arrowOffset = -overflowLeft;
+            bubble.style.setProperty('--tooltip-arrow-x', `calc(50% + ${arrowOffset}px)`);
+        }
+    });
+}
+
+function clampAllTooltips() {
+    const tooltips = document.querySelectorAll('.tooltip-term:not(.tooltip-icon)');
+    tooltips.forEach(term => positionTooltip(term));
+}
+
+function initTooltipHandlers() {
+    const tooltipTerms = document.querySelectorAll('.tooltip-term:not(.tooltip-icon)');
+    tooltipTerms.forEach(term => {
+        term.addEventListener('mouseenter', () => positionTooltip(term));
+        term.addEventListener('focus', () => positionTooltip(term));
+    });
 }
 
 function resizeAllCharts() {
@@ -1211,10 +1315,17 @@ function resizeAllCharts() {
 // Load CSV data and initialize charts
 updateLastUpdatedLabel();
 clampPeriodTooltipBubble();
-window.addEventListener('resize', clampPeriodTooltipBubble);
+clampAllTooltips();
+window.addEventListener('resize', () => {
+    clampPeriodTooltipBubble();
+    clampAllTooltips();
+});
+window.addEventListener('scroll', clampPeriodTooltipBubble, { passive: true });
 const periodTooltipIcon = document.querySelector('.period-summary-text .tooltip-icon');
 if (periodTooltipIcon) {
     periodTooltipIcon.addEventListener('mouseenter', clampPeriodTooltipBubble);
     periodTooltipIcon.addEventListener('focus', clampPeriodTooltipBubble);
 }
+initPeriodTooltipToggle();
+initTooltipHandlers();
 loadCSV();
