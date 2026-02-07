@@ -210,17 +210,26 @@
                 </div>
             </div>
             <div class="chart-interaction-note">Za prikaz specifičnega leta podrsaj po grafu.</div>
-            <div class="chart-title">Povprečne zimske temperature in projekcija</div>
+            <div class="chart-header">
+                <div class="chart-title">Povprečne zimske temperature in projekcija</div>
+                <button type="button" class="chart-export-btn" data-chart-id="tempChart">Shrani PNG</button>
+            </div>
             <canvas id="tempChart" role="img" aria-label="Graf povprečnih zimskih temperatur od leta 1949 do 2025 z linearnim ali Holtovim trendom in projekcijo do leta 2035. Temperatura se zvišuje za 0,29 stopinj Celzija na desetletje."></canvas>
         </div>
 
         <div class="chart-container">
-            <div class="chart-title">Ekstremne temperature skozi desetletja</div>
+            <div class="chart-header">
+                <div class="chart-title">Ekstremne temperature skozi desetletja</div>
+                <button type="button" class="chart-export-btn" data-chart-id="extremesChart">Shrani PNG</button>
+            </div>
             <canvas id="extremesChart" role="img" aria-label="Graf absolutnih minimalnih temperatur po desetletjih od 1949 do 2025. Prikazuje, kako so se najnižje temperature spreminjale skozi čas."></canvas>
         </div>
 
         <div class="chart-container">
-            <div class="chart-title">Mrzli in ledeni dnevi skozi čas</div>
+            <div class="chart-header">
+                <div class="chart-title">Mrzli in ledeni dnevi skozi čas</div>
+                <button type="button" class="chart-export-btn" data-chart-id="frostChart">Shrani PNG</button>
+            </div>
             <canvas id="frostChart" role="img" aria-label="Graf števila mrzlih dni in ledenih dni od 1949 do 2025. Mrzli dnevi imajo minimalno temperaturo pod 0 stopinj, ledeni dnevi pa maksimalno temperaturo pod 0 stopinj. Oba trenda se zmanjšujeta."></canvas>
             <div class="chart-caption">
                 Mrzli dnevi se zmanjšujejo za 2,7 dni/desetletje, ledeni dnevi za 2,2 dni/desetletje
@@ -379,7 +388,10 @@
         </div>
 
         <div class="chart-container">
-            <div class="chart-title">Maksimalna višina snega in dnevi s snežno odejo</div>
+            <div class="chart-header">
+                <div class="chart-title">Maksimalna višina snega in dnevi s snežno odejo</div>
+                <button type="button" class="chart-export-btn" data-chart-id="snowChart">Shrani PNG</button>
+            </div>
             <canvas id="snowChart" role="img" aria-label="Graf maksimalne višine snega v centimetrih in števila dni s snežno odejo od 1949 do 2025. Obe meritvi kažeta upadni trend. Maksimalna višina snega upada za 8,1 centimetrov na desetletje, dnevi s snežno odejo pa se zmanjšujejo za 4,1 dni na desetletje."></canvas>
         </div>
     </div>
@@ -394,8 +406,11 @@
 
 
         <div class="chart-container">
-            <div class="chart-title">
-                Sneženje vs. snežna odeja
+            <div class="chart-header">
+                <div class="chart-title">
+                    Sneženje vs. snežna odeja
+                </div>
+                <button type="button" class="chart-export-btn" data-chart-id="snowComparisonChart">Shrani PNG</button>
             </div>
             <canvas id="snowComparisonChart" role="img" aria-label="Primerjava števila dni s sneženjem in števila dni s snežno odejo od 1949 do 2025. Graf prikazuje, da se snežna odeja krajša 3,2-krat hitreje od upada dnevi s sneženjem, kar kaže na hitrejše taljenje snega."></canvas>
         </div>
@@ -543,7 +558,7 @@
                     </div>
                     <div class="story-text method-note-text">
                     Za vsako spremenljivko je izbran model z najmanjšim MAE pri postopnem preverjanju.
-                    <em>Orientacijski razpon je izračunan kot napoved za 2035 ± 2×MAE (pri številu dni in višini snega je spodnja meja omejena na 0, ker negativne vrednosti niso možne).
+                    Orientacijski razpon je izračunan kot napoved za 2035 ± 2×MAE (pri številu dni in višini snega je spodnja meja omejena na 0, ker negativne vrednosti niso možne).
                     Razponi so namenjeni lažji interpretaciji in niso strogi statistični intervali zaupanja.
                     </div>
                 </div>
